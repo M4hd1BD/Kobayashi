@@ -15,6 +15,7 @@ for (const file of commandFiles) {
 
 
 client.once('ready', () => {
+    client.user.setPresence({ activity: { type: 'PLAYING', name: 'with YOU' }, status: 'online' });
 	console.log('Ready!');
 });
 
