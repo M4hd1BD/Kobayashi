@@ -33,6 +33,14 @@ client.on('message', message => {
 
     const command = client.commands.get(commandName);
 
+    if(command.permissions) {
+        const authorPerm = message.channel.permissionsFor(message.author);
+
+        if(!authorPerm || !authorPerm.has(command.permissions)) {
+            return message.reply("You're not allowed to do this");
+        }
+    }
+
     try {
         command.execute(message, args);
     } catch (error) {
