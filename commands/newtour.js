@@ -83,6 +83,7 @@ Point System: ${pointSystem}
 																				`;
 																				const channel = client.channels.cache.get('808331631345008670');
 																				channel.send(`${finalMessage}`);
+																				isRunning = false;
 																			})
 																			.catch(() => {
 																				message.channel.send('You did not enter any input! 1');

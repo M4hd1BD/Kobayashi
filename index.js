@@ -6,6 +6,7 @@ dotenv.config()
 const Discord = require('discord.js');
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
+global.isRunning = false;
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
@@ -33,6 +34,10 @@ client.on('message', message => {
 
     const command = client.commands.get(commandName);
 
+    if(isRunning) {
+        return message.reply("There already a command running, please wait for it to get done. This might be used as a input for that running command");
+    }
+
     if(command.permissions) {
         const authorPerm = message.channel.permissionsFor(message.author);
 
@@ -42,6 +47,7 @@ client.on('message', message => {
     }
 
     try {
+        isRunning = true;
         command.execute(message, args);
     } catch (error) {
         console.error(error);
