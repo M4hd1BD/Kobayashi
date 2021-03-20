@@ -79,9 +79,9 @@ Point System: ${pointSystem}
 																				
 **Top ${totalQualify}** qualifies for the next round
 																				
-||<@&${'808362192649846824'}>||
+||<@&${process.env.roleID}>||
 																				`;
-																				const channel = client.channels.cache.get('808331631345008670');
+																				const channel = client.channels.cache.get(process.env.channelID);
 																				channel.send(`${finalMessage}`);
 																				isRunning = false;
 																			})
