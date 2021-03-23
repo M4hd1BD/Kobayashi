@@ -10,59 +10,95 @@ module.exports = {
 		const client = new Discord.Client();
 
 		var tourName, roundName, slot, pointSystem, startTime, idpTime, totalQualify, map, date, finalMessage;
-		message.channel.send(`Please enter tournament name:`).then(() => {
+		message.channel.send(`Please enter tournament name (type cancel to cancel):`).then(() => {
 			const filter = m => message.author.id === m.author.id;
 
 			message.channel.awaitMessages(filter, { time: 60000, max: 1, errors: ['time'] })
 			.then(messages => {
 				tourName = messages.first().content;
-				message.channel.send(`Please enter round name:`).then(() => {
+				if (tourName == 'cancel') {
+					isRunning = false;
+					return message.channel.send("Canceled!");
+				}
+				message.channel.send(`Please enter round name (type cancel to cancel):`).then(() => {
 					const filter = m => message.author.id === m.author.id;
 		
 					message.channel.awaitMessages(filter, { time: 60000, max: 1, errors: ['time'] })
 					.then(messages => {
 						roundName = messages.first().content;
-						message.channel.send(`Please enter map name:`).then(() => {
+						if (roundName == 'cancel') {
+							isRunning = false;
+							return message.channel.send("Canceled!");
+						}
+						message.channel.send(`Please enter map name (type cancel to cancel):`).then(() => {
 							const filter = m => message.author.id === m.author.id;
 				
 							message.channel.awaitMessages(filter, { time: 60000, max: 1, errors: ['time'] })
 							.then(messages => {
 								map = messages.first().content;
-								message.channel.send(`Please enter date (DD-MM-YYYY):`).then(() => {
+								if (map == 'cancel') {
+									isRunning = false;
+									return message.channel.send("Canceled!");
+								}
+								message.channel.send(`Please enter date (DD-MM-YYYY) (type cancel to cancel):`).then(() => {
 									const filter = m => message.author.id === m.author.id;
 						
 									message.channel.awaitMessages(filter, { time: 60000, max: 1, errors: ['time'] })
 									.then(messages => {
 										date = messages.first().content;
-										message.channel.send(`Please enter IDP time (HH'MM AM/PM):`).then(() => {
+										if (date == 'cancel') {
+											isRunning = false;
+											return message.channel.send("Canceled!");
+										}
+										message.channel.send(`Please enter IDP time (HH'MM AM/PM) (type cancel to cancel):`).then(() => {
 											const filter = m => message.author.id === m.author.id;
 								
 											message.channel.awaitMessages(filter, { time: 60000, max: 1, errors: ['time'] })
 											.then(messages => {
 												idpTime = messages.first().content;
-												message.channel.send(`Please enter start time (HH'MM AM/PM):`).then(() => {
+												if (idpTime == 'cancel') {
+													isRunning = false;
+													return message.channel.send("Canceled!");
+												}
+												message.channel.send(`Please enter start time (HH'MM AM/PM) (type cancel to cancel):`).then(() => {
 													const filter = m => message.author.id === m.author.id;
 										
 													message.channel.awaitMessages(filter, { time: 60000, max: 1, errors: ['time'] })
 													.then(messages => {
 														startTime = messages.first().content;
-														message.channel.send(`Please enter slot number:`).then(() => {
+														if (startTime == 'cancel') {
+															isRunning = false;
+															return message.channel.send("Canceled!");
+														}
+														message.channel.send(`Please enter slot number (type cancel to cancel):`).then(() => {
 															const filter = m => message.author.id === m.author.id;
 												
 															message.channel.awaitMessages(filter, { time: 60000, max: 1, errors: ['time'] })
 															.then(messages => {
 																slot = messages.first().content;
-																message.channel.send(`Please enter point system (F.E. 20/02):`).then(() => {
+																if (slot == 'cancel') {
+																	isRunning = false;
+																	return message.channel.send("Canceled!");
+																}
+																message.channel.send(`Please enter point system (F.E. 20/2) (type cancel to cancel):`).then(() => {
 																	const filter = m => message.author.id === m.author.id;
 														
 																	message.channel.awaitMessages(filter, { time: 60000, max: 1, errors: ['time'] })
 																	.then(messages => {
 																		pointSystem = messages.first().content;
-																		message.channel.send(`Please enter number of qualifiers:`).then(() => {
+																		if (pointSystem == 'cancel') {
+																			isRunning = false;
+																			return message.channel.send("Canceled!");
+																		}
+																		message.channel.send(`Please enter number of qualifiers (type cancel to cancel):`).then(() => {
 																			const filter = m => message.author.id === m.author.id;
 																			message.channel.awaitMessages(filter, { time: 60000, max: 1, errors: ['time'] })
 																			.then(messages => {
 																				totalQualify = messages.first().content;
+																				if (totalQualify == 'cancel') {
+																					isRunning = false;
+																					return message.channel.send("Canceled!");
+																				}
 																				finalMessage =
 																				`
 ${tourName}
