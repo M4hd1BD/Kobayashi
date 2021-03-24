@@ -11,7 +11,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/m4hd1bd/Kobayashi">
-    <img src="https://static.wikia.nocookie.net/maid-dragon/images/5/52/Kobayashi_5.png/revision/latest?cb=20170315190544" alt="Logo" width="80" height="80">
+    <img src="https://i.ibb.co/CMfGQy6/Untitled.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Kobayashi</h3>
