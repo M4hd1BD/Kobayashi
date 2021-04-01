@@ -122,46 +122,55 @@ Point System: ${pointSystem}
 																				isRunning = false;
 																			})
 																			.catch(() => {
+																				isRunning = false;
 																				message.channel.send('You did not enter any input! 1');
 																			});
 																			});
 																	})
 																	.catch(() => {
+																		isRunning = false;
 																		message.channel.send('You did not enter any input! 2');
 																	});
 																	});
 															})
 															.catch(() => {
+																isRunning = false;
 																message.channel.send('You did not enter any input! 3');
 															});
 															});
 													})
 													.catch(() => {
+														isRunning = false;
 														message.channel.send('You did not enter any input! 4');
 													});
 													});
 											})
 											.catch(() => {
+												isRunning = false;
 												message.channel.send('You did not enter any input! 5');
 											});
 											});
 									})
 									.catch(() => {
+										isRunning = false;
 										message.channel.send('You did not enter any input! 6');
 									});
 									});
 							})
 							.catch(() => {
+								isRunning = false;
 								message.channel.send('You did not enter any input! 7');
 							});
 							});
 					})
 					.catch(() => {
+						isRunning = false;
 						message.channel.send('You did not enter any input! 8');
 					});
 					});
 			})
 			.catch(() => {
+				isRunning = false;
 				message.channel.send('You did not enter any input! 9');
 			});
 			});
