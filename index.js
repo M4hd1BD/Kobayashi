@@ -66,7 +66,7 @@ client.on("message", (message) => {
 });
 
 client.on("guildMemberAdd", (member) => {
-  const guild = client.guilds.cache.get("YOUR_ROLE_ID_HERE");
+  const guild = client.guilds.cache.get(process.env.primaryRole);
   const role = guild.roles.cache.find((role) => role.name === "Peasant");
   member.roles.add(role);
 });
