@@ -25,7 +25,22 @@ client.once("ready", () => {
 });
 
 client.on("message", (message) => {
+  const linkRegEx = new RegExp(
+    "([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?"
+  );
   if (
+    message.content.match(linkRegEx) !== null &&
+    message.channel.id !== process.env.linksChannel
+  ) {
+    message
+      .delete()
+      .then(() =>
+        message.channel.send(
+          `${message.author}, Links aren't allowed here, send them to <#${process.env.linksChannel}>`
+        )
+      );
+    return;
+  } else if (
     !message.content.startsWith(prefix) ||
     message.author.bot ||
     message.channel.type == "dm"
