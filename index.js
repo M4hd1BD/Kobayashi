@@ -1,3 +1,10 @@
+const http = require("http");
+const server = http.createServer((req, res) => {
+  res.writeHead(200);
+  res.end("ok");
+});
+server.listen(3000);
+
 const { prefix } = require("./config.json");
 const fs = require("fs");
 const dotenv = require("dotenv");
@@ -100,10 +107,3 @@ client
     console.log(error);
     process.exit(1);
   });
-
-const http = require("http");
-const server = http.createServer((req, res) => {
-  res.writeHead(200);
-  res.end("ok");
-});
-server.listen(3000);
