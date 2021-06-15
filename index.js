@@ -32,6 +32,11 @@ client.on("message", (message) => {
     message.content.match(linkRegEx) !== null &&
     message.channel.id !== process.env.linksChannel
   ) {
+    if (message.member.hasPermission("ADMINISTRATOR")) {
+      return;
+    } else if (message.channel.id === "808338918268469259") {
+      return;
+    }
     message
       .delete()
       .then(() =>
@@ -86,4 +91,19 @@ client.on("guildMemberAdd", (member) => {
   member.roles.add(role);
 });
 
-client.login(process.env.botToken);
+client
+  .login(process.env.botToken)
+  .then(() => {
+    console.log("We're in!");
+  })
+  .catch((error) => {
+    console.log(error);
+    process.exit(1);
+  });
+
+const http = require("http");
+const server = http.createServer((req, res) => {
+  res.writeHead(200);
+  res.end("ok");
+});
+server.listen(3000);
