@@ -1,9 +1,12 @@
 const http = require("http");
+const PORT = process.env.PORT || 3000;
 const server = http.createServer((req, res) => {
   res.writeHead(200);
   res.end("ok");
 });
-server.listen(3000);
+server.listen(PORT, () => {
+  console.log("Server is up and running!");
+});
 
 const { prefix } = require("./config.json");
 const fs = require("fs");
