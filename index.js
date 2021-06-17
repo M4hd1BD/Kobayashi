@@ -30,7 +30,7 @@ client.on("message", (message) => {
   );
   if (
     message.content.match(linkRegEx) !== null &&
-    message.channel.id !== process.env.linksChannel
+    message.channel.id !== `${process.env.linksChannel}`
   ) {
     if (message.member.hasPermission("ADMINISTRATOR")) {
       return;
