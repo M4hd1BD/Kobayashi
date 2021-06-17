@@ -7,6 +7,7 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 global.isRunning = false;
+global.linkProtection = false;
 
 const commandFiles = fs
   .readdirSync("./commands")
@@ -25,27 +26,30 @@ client.once("ready", () => {
 });
 
 client.on("message", (message) => {
-  const linkRegEx = new RegExp(
-    "([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?"
-  );
-  if (
-    message.content.match(linkRegEx) !== null &&
-    message.channel.id !== `${process.env.linksChannel}`
-  ) {
-    if (message.member.hasPermission("ADMINISTRATOR")) {
-      return;
-    } else if (message.channel.id === "808338918268469259") {
+  if (linkProtection) {
+    const linkRegEx = new RegExp(
+      "([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?"
+    );
+    if (
+      message.content.match(linkRegEx) !== null &&
+      message.channel.id !== `${process.env.linksChannel}`
+    ) {
+      /*if (message.member.hasPermission("ADMINISTRATOR")) {
+        return;
+      } else */ if (message.channel.id === "808338918268469259") {
+        return;
+      }
+      message
+        .delete()
+        .then(() =>
+          message.channel.send(
+            `${message.author}, Links aren't allowed here, send them to <#${process.env.linksChannel}>`
+          )
+        );
       return;
     }
-    message
-      .delete()
-      .then(() =>
-        message.channel.send(
-          `${message.author}, Links aren't allowed here, send them to <#${process.env.linksChannel}>`
-        )
-      );
-    return;
-  } else if (
+  }
+  if (
     !message.content.startsWith(prefix) ||
     message.author.bot ||
     message.channel.type == "dm"
