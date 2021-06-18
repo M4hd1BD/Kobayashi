@@ -39,6 +39,9 @@ client.on("message", (message) => {
       } else if (message.channel.id === "810795631882272799") {
         return;
       }
+      const logChannel = client.channels.cache.get("821275110459047937");
+      const logMessage = `${message.author}'s messsage has been deleted because it failed to pass the link filter. The message they sent was: '${message.content}'`;
+      logChannel.send(logMessage);
       message
         .delete()
         .then(() =>
