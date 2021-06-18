@@ -34,9 +34,9 @@ client.on("message", (message) => {
       message.content.match(linkRegEx) !== null &&
       message.channel.id !== `${process.env.linksChannel}`
     ) {
-      /*if (message.member.hasPermission("ADMINISTRATOR")) {
+      if (message.member.hasPermission("ADMINISTRATOR")) {
         return;
-      } else */ if (message.channel.id === "808338918268469259") {
+      } else if (message.channel.id === "810795631882272799") {
         return;
       }
       message
