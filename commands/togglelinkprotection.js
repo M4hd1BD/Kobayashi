@@ -1,6 +1,7 @@
 module.exports = {
   name: "togglelinkprotection",
   description: "Turn on or off Link Protection",
+  permissions: "ADMINISTRATOR",
   execute(message, args) {
     if (linkProtection) {
       linkProtection = false;
