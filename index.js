@@ -1,5 +1,6 @@
 const { prefix } = require("./config.json");
 const fs = require("fs");
+const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -8,6 +9,20 @@ const client = new Discord.Client();
 client.commands = new Discord.Collection();
 global.isRunning = false;
 global.linkProtection = false;
+
+let mongoConfig = process.env.mainDB;
+if (mongoConfig == null || mongoConfig == "") {
+  mongoConfig = "mongodb://localhost/disBot";
+}
+mongoose.connect(mongoConfig, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", function () {
+  console.log("DB looks OK!");
+});
 
 const commandFiles = fs
   .readdirSync("./commands")
@@ -107,13 +122,3 @@ client
     console.log(error);
     process.exit(1);
   });
-
-const http = require("http");
-const PORT = process.env.PORT || 3000;
-const server = http.createServer((req, res) => {
-  res.writeHead(200);
-  res.end("ok");
-});
-server.listen(PORT, () => {
-  console.log("Server is up and running!");
-});
