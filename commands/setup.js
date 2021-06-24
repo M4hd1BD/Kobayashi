@@ -13,7 +13,7 @@ module.exports = {
       linkFilter: false,
       linkChannel: 0,
     };
-    const saveData = (data) => {
+    const insertData = (data) => {
       Config.create(
         {
           _id: guildID,
@@ -33,6 +33,37 @@ module.exports = {
           return;
         }
       );
+    };
+
+    const updateData = (data) => {
+      Config.findByIdAndUpdate(
+        guildID,
+        {
+          tourInfoChannel: data.tourInfoChannel,
+          tourPingRole: data.tourPingRole,
+          autoRole: data.autoRole,
+          autoRoleID: data.autoRoleID,
+          linkFilter: data.linkFilter,
+          linkChannel: data.linkChannel,
+        },
+        (error, config) => {
+          if (error) {
+            console.log(error);
+            return;
+          }
+          console.log(config);
+          return;
+        }
+      );
+    };
+    const saveData = (data) => {
+      Config.findById(guildID, function (err, guild) {
+        if (guild !== null) {
+          updateData(data);
+        } else if (guild == null) {
+          insertData(data);
+        }
+      });
     };
 
     message.channel
@@ -151,7 +182,7 @@ module.exports = {
                                                     );
                                                   });
                                               } else if (
-                                                dataToEnter.linkFilter == "no"
+                                                dataToEnter.linkFilter !== "yes"
                                               ) {
                                                 dataToEnter.linkFilter = false;
                                                 saveData(dataToEnter);
@@ -182,7 +213,7 @@ module.exports = {
                                     "You did not enter any input! 6"
                                   );
                                 });
-                            } else if (dataToEnter.autoRole == "no") {
+                            } else if (dataToEnter.autoRole !== "yes") {
                               dataToEnter.autoRole = false;
                               message.channel
                                 .send("Do you want to filter links (Yes/No): ")
@@ -233,7 +264,7 @@ module.exports = {
                                             );
                                           });
                                       } else if (
-                                        dataToEnter.linkFilter == "no"
+                                        dataToEnter.linkFilter !== "yes"
                                       ) {
                                         dataToEnter.linkFilter = false;
                                         saveData(dataToEnter);
