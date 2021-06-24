@@ -136,6 +136,7 @@ module.exports = {
                                                         dataToEnter.linkChannel =
                                                           messages.first().content;
                                                         saveData(dataToEnter);
+                                                        isRunning = false;
                                                         //console.log(dataToEnter);
                                                       })
                                                       .catch(() => {
@@ -154,6 +155,7 @@ module.exports = {
                                               ) {
                                                 dataToEnter.linkFilter = false;
                                                 saveData(dataToEnter);
+                                                isRunning = false;
                                                 //console.log(dataToEnter);
                                               }
                                             })
@@ -216,6 +218,7 @@ module.exports = {
                                                 dataToEnter.linkChannel =
                                                   messages.first().content;
                                                 saveData(dataToEnter);
+                                                isRunning = false;
                                                 //console.log(dataToEnter);
                                               })
                                               .catch(() => {
@@ -234,6 +237,7 @@ module.exports = {
                                       ) {
                                         dataToEnter.linkFilter = false;
                                         saveData(dataToEnter);
+                                        isRunning = false;
                                         //console.log(dataToEnter);
                                       }
                                     })
@@ -272,6 +276,5 @@ module.exports = {
             message.channel.send("You did not enter any input! 9");
           });
       });
-    isRunning = false;
   },
 };
