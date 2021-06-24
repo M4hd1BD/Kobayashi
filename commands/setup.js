@@ -2,6 +2,7 @@ const Config = require("../dbModels/config");
 module.exports = {
   name: "setup",
   description: "Setup the bot",
+  permissions: "ADMINISTRATOR",
   execute(message, args) {
     const guildID = message.guild.id;
     var dataToEnter = {
