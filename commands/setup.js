@@ -33,134 +33,244 @@ module.exports = {
         }
       );
     };
+
     message.channel
       .send(
-        "Please enter the channelID where I should send tournament informations: "
+        "Enter the channel ID you want your tournament info to be posted on: "
       )
       .then(() => {
         const filter = (m) => message.author.id === m.author.id;
         message.channel
-          .awaitMessages(filter, { max: 1, time: 30000, errors: ["time"] })
-          .then((msg) => {
-            dataToEnter.tourInfoChannel = msg.first().content;
+          .awaitMessages(filter, {
+            time: 60000,
+            max: 1,
+            errors: ["time"],
+          })
+          .then((messages) => {
+            dataToEnter.tourInfoChannel = messages.first().content;
             message.channel
               .send(
-                "Enter the role ID of whom I should ping when posting tournament informations: "
+                "Enter the role ID you want to ping when posting tournament info: "
               )
               .then(() => {
                 const filter = (m) => message.author.id === m.author.id;
                 message.channel
                   .awaitMessages(filter, {
+                    time: 60000,
                     max: 1,
-                    time: 30000,
                     errors: ["time"],
                   })
-                  .then((msg) => {
-                    dataToEnter.tourPingRole = msg.first().content;
+                  .then((messages) => {
+                    dataToEnter.tourPingRole = messages.first().content;
                     message.channel
                       .send(
-                        "Should I automatically add a role to a new user (true/false): "
+                        "Do you want to automatically assign a role to new user (Yes/No): "
                       )
                       .then(() => {
                         const filter = (m) => message.author.id === m.author.id;
                         message.channel
                           .awaitMessages(filter, {
+                            time: 60000,
                             max: 1,
-                            time: 30000,
                             errors: ["time"],
                           })
-                          .then((msg) => {
-                            dataToEnter.autoRole = msg.first().content;
-                            message.channel
-                              .send(
-                                "Enter the role ID that I should assign to a new user (enter N/A if you don't want it): "
-                              )
-                              .then(() => {
-                                const filter = (m) =>
-                                  message.author.id === m.author.id;
-                                message.channel
-                                  .awaitMessages(filter, {
-                                    max: 1,
-                                    time: 30000,
-                                    errors: ["time"],
-                                  })
-                                  .then((msg) => {
-                                    dataToEnter.autoRoleID =
-                                      msg.first().content;
-                                    message.channel
-                                      .send(
-                                        "Should I filter links (true/false): "
-                                      )
-                                      .then(() => {
-                                        const filter = (m) =>
-                                          message.author.id === m.author.id;
-                                        message.channel
-                                          .awaitMessages(filter, {
-                                            max: 1,
-                                            time: 30000,
-                                            errors: ["time"],
-                                          })
-                                          .then((msg) => {
-                                            dataToEnter.linkFilter =
-                                              msg.first().content;
-                                            message.channel
-                                              .send(
-                                                "Enter the channel ID where I should instruct users to post links (enter N/A if you don't want it): "
-                                              )
-                                              .then(() => {
-                                                const filter = (m) =>
-                                                  message.author.id ===
-                                                  m.author.id;
+                          .then((messages) => {
+                            dataToEnter.autoRole = messages
+                              .first()
+                              .content.toLowerCase();
+                            if (dataToEnter.autoRole == "yes") {
+                              dataToEnter.autoRole = true;
+                              message.channel
+                                .send(
+                                  "Enter the role ID you want to automatically assign to new users: "
+                                )
+                                .then(() => {
+                                  const filter = (m) =>
+                                    message.author.id === m.author.id;
+                                  message.channel
+                                    .awaitMessages(filter, {
+                                      time: 60000,
+                                      max: 1,
+                                      errors: ["time"],
+                                    })
+                                    .then((messages) => {
+                                      dataToEnter.autoRoleID =
+                                        messages.first().content;
+                                      message.channel
+                                        .send(
+                                          "Do you want to filter links (Yes/No): "
+                                        )
+                                        .then(() => {
+                                          const filter = (m) =>
+                                            message.author.id === m.author.id;
+                                          message.channel
+                                            .awaitMessages(filter, {
+                                              time: 60000,
+                                              max: 1,
+                                              errors: ["time"],
+                                            })
+                                            .then((messages) => {
+                                              dataToEnter.linkFilter = messages
+                                                .first()
+                                                .content.toLowerCase();
+                                              if (
+                                                dataToEnter.linkFilter == "yes"
+                                              ) {
+                                                dataToEnter.linkFilter = true;
                                                 message.channel
-                                                  .awaitMessages(filter, {
-                                                    max: 1,
-                                                    time: 30000,
-                                                    errors: ["time"],
+                                                  .send(
+                                                    "Enter the channel you want to instruct the users to send links: "
+                                                  )
+                                                  .then(() => {
+                                                    const filter = (m) =>
+                                                      message.author.id ===
+                                                      m.author.id;
+                                                    message.channel
+                                                      .awaitMessages(filter, {
+                                                        time: 60000,
+                                                        max: 1,
+                                                        errors: ["time"],
+                                                      })
+                                                      .then((messages) => {
+                                                        dataToEnter.linkChannel =
+                                                          messages.first().content;
+                                                        saveData(dataToEnter);
+                                                        //console.log(dataToEnter);
+                                                      })
+                                                      .catch(() => {
+                                                        message.channel.send(
+                                                          "You did not enter any input! 1"
+                                                        );
+                                                      });
                                                   })
-                                                  .then((msg) => {
-                                                    dataToEnter.linkChannel =
-                                                      msg.first().content;
+                                                  .catch(() => {
                                                     message.channel.send(
-                                                      "Saving now..."
+                                                      "You did not enter any input! 2"
                                                     );
-                                                    saveData(dataToEnter);
-                                                    return;
-                                                  })
-                                                  .catch((err) => {
-                                                    message.channel.send(
-                                                      "Timed out! 1"
-                                                    );
-                                                    console.log(err);
                                                   });
+                                              } else if (
+                                                dataToEnter.linkFilter == "no"
+                                              ) {
+                                                dataToEnter.linkFilter = false;
+                                                saveData(dataToEnter);
+                                                //console.log(dataToEnter);
+                                              }
+                                            })
+                                            .catch(() => {
+                                              message.channle.send(
+                                                "You did not enter any input! 3"
+                                              );
+                                            });
+                                        })
+                                        .catch(() => {
+                                          message.channel.send(
+                                            "You did not enter any input! 4"
+                                          );
+                                        });
+                                    })
+                                    .catch(() => {
+                                      message.channel.send(
+                                        "You did not enter any input! 5"
+                                      );
+                                    });
+                                })
+                                .catch(() => {
+                                  message.channel.send(
+                                    "You did not enter any input! 6"
+                                  );
+                                });
+                            } else if (dataToEnter.autoRole == "no") {
+                              dataToEnter.autoRole = false;
+                              message.channel
+                                .send("Do you want to filter links (Yes/No): ")
+                                .then(() => {
+                                  const filter = (m) =>
+                                    message.author.id === m.author.id;
+                                  message.channel
+                                    .awaitMessages(filter, {
+                                      time: 60000,
+                                      max: 1,
+                                      errors: ["time"],
+                                    })
+                                    .then((messages) => {
+                                      dataToEnter.linkFilter = messages
+                                        .first()
+                                        .content.toLowerCase();
+                                      if (dataToEnter.linkFilter == "yes") {
+                                        dataToEnter.linkFilter = true;
+                                        message.channel
+                                          .send(
+                                            "Enter the channel ID you want to instruct the users to send links to: "
+                                          )
+                                          .then(() => {
+                                            const filter = (m) =>
+                                              message.author.id === m.author.id;
+                                            message.channel
+                                              .awaitMessages(filter, {
+                                                time: 60000,
+                                                max: 1,
+                                                errors: ["time"],
+                                              })
+                                              .then((messages) => {
+                                                dataToEnter.linkChannel =
+                                                  messages.first().content;
+                                                saveData(dataToEnter);
+                                                //console.log(dataToEnter);
+                                              })
+                                              .catch(() => {
+                                                message.channel.send(
+                                                  "You did not enter any input! -4"
+                                                );
                                               });
                                           })
-                                          .catch((err) => {
+                                          .catch(() => {
                                             message.channel.send(
-                                              "Timed out! 2"
+                                              "You did not enter any input! -3"
                                             );
                                           });
-                                      });
-                                  })
-                                  .catch((err) => {
-                                    message.channel.send("Timed out! 3");
-                                  });
-                              });
+                                      } else if (
+                                        dataToEnter.linkFilter == "no"
+                                      ) {
+                                        dataToEnter.linkFilter = false;
+                                        saveData(dataToEnter);
+                                        //console.log(dataToEnter);
+                                      }
+                                    })
+                                    .catch(() => {
+                                      message.channel.send(
+                                        "You did not enter any input! -2"
+                                      );
+                                    });
+                                })
+                                .catch(() => {
+                                  message.channel.send(
+                                    "You did not enter any input! -1"
+                                  );
+                                });
+                            }
                           })
-                          .catch((err) => {
-                            message.channel.send("Timed out! 4");
+                          .catch(() => {
+                            message.channel.send(
+                              "You did not enter any input! 0"
+                            );
                           });
+                      })
+                      .catch(() => {
+                        message.channel.send("You did not enter any input! 7");
                       });
                   })
-                  .catch((err) => {
-                    message.channel.send("Timed out! 5");
+                  .catch(() => {
+                    message.channel.send("You did not enter any input! 7");
                   });
+              })
+              .catch(() => {
+                message.channel.send("You did not enter any input! 8");
               });
           })
-          .catch((err) => {
-            message.channel.send("Timed out! 6");
+          .catch(() => {
+            message.channel.send("You did not enter any input! 9");
           });
       });
-
     isRunning = false;
   },
 };
