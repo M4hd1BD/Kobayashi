@@ -25,6 +25,8 @@ db.once("open", function () {
   console.log("DB looks OK!");
 });
 
+const Config = require("./dbModels/config");
+
 const commandFiles = fs
   .readdirSync("./commands")
   .filter((file) => file.endsWith(".js"));
@@ -40,15 +42,39 @@ client.once("ready", () => {
   });
   console.log("Ready!");
 });
-
+let configs = {
+  tourInfoChannel: "",
+  tourPingRole: "",
+  autoRole: false,
+  autoRoleID: "",
+  linkFilter: false,
+  linkChannel: "",
+};
 client.on("message", (message) => {
-  if (linkProtection) {
+  const guildID = message.guild.id;
+  const setConfigs = (data) => {
+    configs.tourInfoChannel = data.tourInfoChannel;
+    configs.tourPingRole = data.tourPingRole;
+    configs.linkFilter = data.linkFilter;
+    configs.linkChannel = data.linkChannel;
+  };
+  Config.findById(guildID, function (err, cfgs) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    if (cfgs !== null) {
+      setConfigs(cfgs);
+    }
+  });
+  //console.log(configs);
+  if (configs.linkFilter) {
     const linkRegEx = new RegExp(
       "([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?"
     );
     if (
       message.content.match(linkRegEx) !== null &&
-      message.channel.id !== `${process.env.linksChannel}`
+      message.channel.id !== configs.linkChannel
     ) {
       if (message.member.hasPermission("ADMINISTRATOR")) {
         return;
@@ -62,7 +88,7 @@ client.on("message", (message) => {
         .delete()
         .then(() =>
           message.channel.send(
-            `${message.author}, Links aren't allowed here, send them to <#${process.env.linksChannel}>`
+            `${message.author}, Links aren't allowed here, send them to <#${configs.linkChannel}>`
           )
         );
       return;
@@ -109,9 +135,27 @@ client.on("message", (message) => {
 });
 
 client.on("guildMemberAdd", (member) => {
-  const guild = client.guilds.cache.get(process.env.primaryRole);
-  const role = guild.roles.cache.find((role) => role.name === "Peasant");
-  member.roles.add(role);
+  const guildID = member.guild.id;
+  const setConfigs = (data) => {
+    configs.autoRole = data.autoRole;
+    configs.autoRoleID = data.autoRoleID;
+  };
+  Config.findById(guildID, function (err, cfgs) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    if (cfgs !== null) {
+      setConfigs(cfgs);
+    }
+  });
+  if (configs.autoRole) {
+    const guild = client.guilds.cache.get(guildID);
+    const role = guild.roles.cache.find(
+      (role) => role.id === configs.autoRoleID
+    );
+    member.roles.add(role);
+  }
 });
 
 client
