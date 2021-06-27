@@ -6,12 +6,12 @@ module.exports = {
   execute(message, args) {
     const guildID = message.guild.id;
     var dataToEnter = {
-      tourInfoChannel: 0,
-      tourPingRole: 0,
+      tourInfoChannel: "",
+      tourPingRole: "",
       autoRole: false,
-      autoRoleID: 0,
+      autoRoleID: "",
       linkFilter: false,
-      linkChannel: 0,
+      linkChannel: "",
     };
     const insertData = (data) => {
       Config.create(
@@ -29,7 +29,7 @@ module.exports = {
             console.log(error);
             return;
           }
-          console.log(config);
+          message.channel.send("Saved Configuration!");
           return;
         }
       );
@@ -51,13 +51,16 @@ module.exports = {
             console.log(error);
             return;
           }
-          console.log(config);
-          return;
+          message.channel.send("Updated Configuration!");
         }
       );
     };
     const saveData = (data) => {
       Config.findById(guildID, function (err, guild) {
+        if (err) {
+          console.log(err);
+          return;
+        }
         if (guild !== null) {
           updateData(data);
         } else if (guild == null) {

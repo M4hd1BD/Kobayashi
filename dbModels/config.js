@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 
 const configSchema = new mongoose.Schema({
-  _id: Number,
-  tourInfoChannel: Number,
-  tourPingRole: Number,
+  _id: String,
+  tourInfoChannel: String,
+  tourPingRole: String,
   autoRole: Boolean,
-  autoRoleID: Number,
+  autoRoleID: String,
   linkFilter: Boolean,
-  linkChannel: Number,
+  linkChannel: String,
 });
 
 module.exports = mongoose.model("Config", configSchema);
