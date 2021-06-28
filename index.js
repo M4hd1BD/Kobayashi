@@ -42,14 +42,7 @@ client.once("ready", () => {
   });
   console.log("Ready!");
 });
-let configs = {
-  tourInfoChannel: "",
-  tourPingRole: "",
-  autoRole: false,
-  autoRoleID: "",
-  linkFilter: false,
-  linkChannel: "",
-};
+let configs = {};
 client.on("message", (message) => {
   const guildID = message.guild.id;
   const setConfigs = (data) => {
@@ -66,34 +59,39 @@ client.on("message", (message) => {
     if (cfgs !== null) {
       setConfigs(cfgs);
     }
-  });
-  //console.log(configs);
-  if (configs.linkFilter) {
-    const linkRegEx = new RegExp(
-      "([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?"
-    );
-    if (
-      message.content.match(linkRegEx) !== null &&
-      message.channel.id !== configs.linkChannel
-    ) {
-      if (message.member.hasPermission("ADMINISTRATOR")) {
-        return;
-      } else if (message.channel.id === "810795631882272799") {
-        return;
-      }
-      const logChannel = client.channels.cache.get("821275110459047937");
-      const logMessage = `${message.author}'s messsage has been deleted because it failed to pass the link filter. The message they sent was: '${message.content}'`;
-      logChannel.send(logMessage);
-      message
-        .delete()
-        .then(() =>
-          message.channel.send(
-            `${message.author}, Links aren't allowed here, send them to <#${configs.linkChannel}>`
-          )
+  })
+    .then(() => {
+      if (configs.linkFilter) {
+        const linkRegEx = new RegExp(
+          "([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?"
         );
-      return;
-    }
-  }
+        if (
+          message.content.match(linkRegEx) !== null &&
+          message.channel.id !== configs.linkChannel
+        ) {
+          if (message.member.hasPermission("ADMINISTRATOR")) {
+            return;
+          } else if (message.channel.id === "810795631882272799") {
+            return;
+          }
+          const logChannel = client.channels.cache.get("821275110459047937");
+          const logMessage = `${message.author}'s messsage has been deleted because it failed to pass the link filter. The message they sent was: '${message.content}'`;
+          logChannel.send(logMessage);
+          message
+            .delete()
+            .then(() =>
+              message.channel.send(
+                `${message.author}, Links aren't allowed here, send them to <#${configs.linkChannel}>`
+              )
+            );
+          return;
+        }
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
   if (
     !message.content.startsWith(prefix) ||
     message.author.bot ||
@@ -148,14 +146,19 @@ client.on("guildMemberAdd", (member) => {
     if (cfgs !== null) {
       setConfigs(cfgs);
     }
-  });
-  if (configs.autoRole) {
-    const guild = client.guilds.cache.get(guildID);
-    const role = guild.roles.cache.find(
-      (role) => role.id === configs.autoRoleID
-    );
-    member.roles.add(role);
-  }
+  })
+    .then(() => {
+      if (configs.autoRole) {
+        const guild = client.guilds.cache.get(guildID);
+        const role = guild.roles.cache.find(
+          (role) => role.id === configs.autoRoleID
+        );
+        member.roles.add(role);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 client
