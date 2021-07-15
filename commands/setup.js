@@ -12,27 +12,45 @@ module.exports = {
       autoRoleID: "",
       linkFilter: false,
       linkChannel: "",
+      logChannel: "",
     };
     const insertData = (data) => {
-      Config.create(
-        {
-          _id: guildID,
-          tourInfoChannel: data.tourInfoChannel,
-          tourPingRole: data.tourPingRole,
-          autoRole: data.autoRole,
-          autoRoleID: data.autoRoleID,
-          linkFilter: data.linkFilter,
-          linkChannel: data.linkChannel,
-        },
-        (error, config) => {
-          if (error) {
-            console.log(error);
-            return;
-          }
-          message.channel.send("Saved Configuration!");
-          return;
-        }
-      );
+      message.guild.channels
+        .create("kobayashi-log", {
+          type: "text",
+          permissionOverwrites: [
+            {
+              id: message.guild.roles.everyone.id,
+              deny: ["VIEW_CHANNEL"],
+            },
+          ],
+        })
+        .then((channel) => {
+          console.log(channel.id);
+          data.logChannel = channel.id;
+        })
+        .then(() => {
+          Config.create(
+            {
+              _id: guildID,
+              tourInfoChannel: data.tourInfoChannel,
+              tourPingRole: data.tourPingRole,
+              autoRole: data.autoRole,
+              autoRoleID: data.autoRoleID,
+              linkFilter: data.linkFilter,
+              linkChannel: data.linkChannel,
+              logChannel: data.logChannel,
+            },
+            (error, config) => {
+              if (error) {
+                console.log(error);
+                return;
+              }
+              message.channel.send("Saved Configuration!");
+              return;
+            }
+          );
+        });
     };
 
     const updateData = (data) => {

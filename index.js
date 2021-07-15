@@ -51,6 +51,7 @@ client.on("message", (message) => {
     configs.linkFilter = data.linkFilter;
     configs.linkChannel = data.linkChannel;
     configs.whiteList = data.whiteList;
+    configs.logChannel = data.logChannel;
   };
   Config.findById(guildID, function (err, cfgs) {
     if (err) {
@@ -75,7 +76,7 @@ client.on("message", (message) => {
           } else if (configs.whiteList.includes(message.channel.id)) {
             return;
           }
-          const logChannel = client.channels.cache.get("821275110459047937");
+          const logChannel = client.channels.cache.get(configs.logChannel);
           const logMessage = `${message.author}'s messsage has been deleted because it failed to pass the link filter. The message they sent was: '${message.content}'`;
           logChannel.send(logMessage);
           message
