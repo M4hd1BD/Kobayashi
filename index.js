@@ -50,6 +50,7 @@ client.on("message", (message) => {
     configs.tourPingRole = data.tourPingRole;
     configs.linkFilter = data.linkFilter;
     configs.linkChannel = data.linkChannel;
+    configs.whiteList = data.whiteList;
   };
   Config.findById(guildID, function (err, cfgs) {
     if (err) {
@@ -71,7 +72,7 @@ client.on("message", (message) => {
         ) {
           if (message.member.hasPermission("ADMINISTRATOR")) {
             return;
-          } else if (message.channel.id === "810795631882272799") {
+          } else if (configs.whiteList.includes(message.channel.id)) {
             return;
           }
           const logChannel = client.channels.cache.get("821275110459047937");

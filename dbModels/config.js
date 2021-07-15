@@ -8,6 +8,7 @@ const configSchema = new mongoose.Schema({
   autoRoleID: String,
   linkFilter: Boolean,
   linkChannel: String,
+  whiteList: Array,
 });
 
 module.exports = mongoose.model("Config", configSchema);
