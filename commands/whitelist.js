@@ -2,6 +2,7 @@ const Config = require("../dbModels/config");
 module.exports = {
   name: "whitelist",
   description: "Whitelist a channel for link filter.",
+  permissions: "ADMINISTRATOR",
   execute(message, args) {
     const guildID = message.guild.id;
     var whiteList = [];
